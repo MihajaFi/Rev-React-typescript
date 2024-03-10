@@ -1,12 +1,54 @@
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import React, { useState } from "react";
 import "./TaskManager.css";
 
 interface Task {
-  id: string ; 
+  id: string;
   title: string;
 }
 
+interface TaskManagerState {
+  title: string;
+  tasks: Task[];
+  searchKeyword: string;
+}
+
+const initialState: TaskManagerState = {
+  title: "",
+  tasks: [],
+  searchKeyword: "",
+};
+const useTaskManager = () => {
+  const [state, setState] = useState(initialState);
+  const { title, tasks, searchKeyword } = state;
+
+  const completeTask = (id: string) => {
+    setState({ ...state, tasks: tasks.filter((tasks) => tasks.id !== id) });
+  };
+  const updateTask = (id: string, taskUpdate: Partial<Task>) => {
+    const updateTasks = tasks.map((task) =>
+      task.id === id ? { ...task, ...taskUpdate } : task
+    );
+    setState({ ...state, tasks: updateTasks });
+  };
+  const addTask = () => {
+    if (title.length < 1) {
+      return;
+    }
+
+    const newTask = {
+      id: nanoid(),
+      title,
+    };
+    setState({ ...state, tasks: [...tasks, newTask], title: "" });
+  };
+  const handleSearch = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, searchKeyword: ev.target.value });
+  };
+  const filteredTasks = tasks.filter((task) =>
+    task.title.toLowerCase().includes(searchKeyword.toLowerCase())
+  );
+};
 // TODO: create custom hook to manage task state
 export const TaskManager = () => {
   const [title, setTitle] = useState("");
@@ -19,8 +61,10 @@ export const TaskManager = () => {
   };
 
   const updateTask = (id: string, taskUpdate: Partial<Task>) => {
-      const updateTasks = tasks.map((task) =>(task.id === id ? {...task, ...taskUpdate} : task));
-      setTasks(updateTasks);
+    const updateTasks = tasks.map((task) =>
+      task.id === id ? { ...task, ...taskUpdate } : task
+    );
+    setTasks(updateTasks);
   };
 
   const addTask = () => {
@@ -37,7 +81,7 @@ export const TaskManager = () => {
     setTitle("");
   };
 
-  const handleSearch = (ev) => {
+  const handleSearch = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(ev.target.value);
   };
 
