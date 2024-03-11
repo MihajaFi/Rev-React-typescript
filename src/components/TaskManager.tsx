@@ -5,7 +5,7 @@ import "./TaskManager.css";
 
 // TODO: create custom hook to manage task state
 export const TaskManager = () => {
-  const { title,setTitle, completeTask, updateTask, addTask, handleSearch, filteredTasks } = useTaskManager()
+  const { title,setTitle, completeTask, updateTask, addTask,deleteTask, handleSearch, filteredTasks } = useTaskManager()
 
   return (
     <div className="container">
@@ -38,6 +38,7 @@ export const TaskManager = () => {
                 onChange={(e) => updateTask(task.id, { title: e.target.value })}
               />
               <button onClick={() => completeTask(task.id)}>Done</button>
+              <button onClick={() => deleteTask(task.id)}>Delete</button>
             </div>
           </li>
         ))}

@@ -24,6 +24,10 @@ export const useTaskManager = () => {
   const completeTask = (id: string) => {
     setState({ ...state, tasks: tasks.filter((tasks) => tasks.id !== id) });
   };
+
+  const deleteTask = (id: string) => {
+    setState({ ...state, tasks: tasks.filter((task) => task.id !== id)})
+  }
   const updateTask = (id: string, taskUpdate: Partial<Task>) => {
     const updateTasks = tasks.map((task) =>
       task.id === id ? { ...task, ...taskUpdate } : task
@@ -47,5 +51,5 @@ export const useTaskManager = () => {
   const filteredTasks = tasks.filter((task) =>
     task.title.toLowerCase().includes(searchKeyword.toLowerCase())
   );
-  return { title,setTitle, handleSearch, addTask, updateTask, completeTask, filteredTasks};
+  return { title,setTitle, handleSearch, addTask,deleteTask, updateTask, completeTask, filteredTasks};
 };
